@@ -1,0 +1,13 @@
+1) Integrando a API do AluraBooks
+Imagine que você trabalha em uma startup de tecnologia educacional focada em promover a leitura. Sua equipe deseja criar um portal chamado "EduLivros", que exibe uma lista de livros educacionais disponíveis. Você é responsável por integrar, ao site, a API que fornece os dados dos livros. Para começar, você precisa realizar uma requisição à API fornecida e exibir os resultados em um formato legível para a equipe de desenvolvimento.
+
+Neste exercício, usaremos a API AluraBooks.
+
+Siga as instruções a seguir:
+
+Crie uma pasta chamada “app” e dentro dela, um arquivo main.js;
+Crie, no arquivo main.js, uma variável de livros que será inicializada como um array vazio;
+Defina uma constante endpointDaApi com o URL fornecido para acessar os livros;
+Implemente uma função assíncrona getBuscaLivrosDaAPI que realiza uma requisição para o endpoint da API e atualiza a variável livros com os dados recebidos;
+Use console.table() para exibir os livros de forma organizada no console;
+Lembre-se de adicionar a tag <script> que referencia seu arquivo main.js no arquivo index.html do projeto.
