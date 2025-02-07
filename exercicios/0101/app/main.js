@@ -23,9 +23,11 @@ function aplicarDesconto(livro) {
 function exibirOsLivrosNaTela(listaDeLivros) {
     elementoParaInserirLivros.innerHTML = ''
     listaDeLivros.forEach(livro => {
+        let disponibilidade = livro.quantidade > 0 ? 'disponivel' : 'indisponivel'
         elementoParaInserirLivros.innerHTML += `
             <div class="livro">
                 <img src="${livro.imagem}" alt="${livro.alt}" />
+                <h2>${disponibilidade}</h2>
                 <h2>${livro.titulo}</h2>
                 <p>${livro.autor}</p>
                 <p>R$${livro.preco.toFixed(2)}</p>
@@ -42,7 +44,15 @@ botoes.forEach(btn => btn.addEventListener('click', filtrarLivros))
 function filtrarLivros() {
     const elementoBtn = document.getElementById(this.id)
     const categoria = elementoBtn.value
-    let livrosFiltrados = livros.filter(livro => livro.categoria == categoria)
+    let livrosFiltrados = categoria == 'disponivel' ? livros.filter(livro => livro.quantidade > 0) : livros.filter(livro => livro.categoria == categoria)
     // console.table(livrosFiltrados)
     exibirOsLivrosNaTela(livrosFiltrados)
+}
+
+let btnOrdenarPorPreco = document.getElementById('btnOrdenarPorPreco')
+btnOrdenarPorPreco.addEventListener('click', ordenarLivrosPorPreco)
+
+function ordenarLivrosPorPreco(){
+    let livrosOrdenados = livros.sort((a, b) => a.preco - b.preco)
+    exibirOsLivrosNaTela(livrosOrdenados)
 }
