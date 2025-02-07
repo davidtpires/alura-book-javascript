@@ -2,6 +2,7 @@ let livros = []
 const endpointDaAPI = 'https://guilhermeonrails.github.io/casadocodigo/livros.json'
 getBuscarLivrosDaAPI()
 const elementoParaInserirLivros = document.getElementById('livros')
+const elementoComValorTotalDeLivrosDisponiveis = document.getElementById('valor_total_livros_disponiveis')
 
 async function getBuscarLivrosDaAPI() {
     const res = await fetch(endpointDaAPI)
@@ -21,6 +22,7 @@ function aplicarDesconto(livro) {
 }
 
 function exibirOsLivrosNaTela(listaDeLivros) {
+    elementoComValorTotalDeLivrosDisponiveis.innerHTML = ''
     elementoParaInserirLivros.innerHTML = ''
     listaDeLivros.forEach(livro => {
         let disponibilidade = livro.quantidade > 0 ? 'disponivel' : 'indisponivel'
@@ -44,15 +46,39 @@ botoes.forEach(btn => btn.addEventListener('click', filtrarLivros))
 function filtrarLivros() {
     const elementoBtn = document.getElementById(this.id)
     const categoria = elementoBtn.value
-    let livrosFiltrados = categoria == 'disponivel' ? livros.filter(livro => livro.quantidade > 0) : livros.filter(livro => livro.categoria == categoria)
-    // console.table(livrosFiltrados)
+    let livrosFiltrados = categoria == 'disponivel' ? filtrarPorDisponibilidade() : filtrarPorCategoria(categoria)
+    console.table(livrosFiltrados)
     exibirOsLivrosNaTela(livrosFiltrados)
+    if(categoria == 'disponivel') {
+        const valorTotal = calcularValorTotalDeLivrosDisponiveis(livrosFiltrados)
+        exibirValorTotalDosLivrosDisponiveisNaTela(valorTotal);
+    }
 }
 
 let btnOrdenarPorPreco = document.getElementById('btnOrdenarPorPreco')
 btnOrdenarPorPreco.addEventListener('click', ordenarLivrosPorPreco)
 
+function filtrarPorCategoria(categoria) {
+    return livros.filter(livro => livro.categoria == categoria)
+}
+
+function filtrarPorDisponibilidade() {
+    return livros.filter(livro => livro.quantidade > 0)
+}
+
 function ordenarLivrosPorPreco(){
     let livrosOrdenados = livros.sort((a, b) => a.preco - b.preco)
     exibirOsLivrosNaTela(livrosOrdenados)
+}
+
+function exibirValorTotalDosLivrosDisponiveisNaTela(valorTotal) {
+    elementoComValorTotalDeLivrosDisponiveis.innerHTML = `
+        <div class="livros__disponiveis">
+        <p>Todos os livros disponíveis por R$ <span id="valor">${valorTotal}</span></p>
+        </div>
+    `
+}
+
+function calcularValorTotalDeLivrosDisponiveis(livros) {
+    return livros.reduce((acc, livro) => acc + livro.preco, 0).toFixed(2)
 }
